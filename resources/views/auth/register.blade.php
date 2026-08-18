@@ -77,7 +77,7 @@
             position: relative;
         }
 
-        .input-group i {
+        .input-group > i:first-child {
             position: absolute;
             left: 15px;
             top: 50%;
@@ -107,6 +107,21 @@
 
         .form-control::placeholder {
             color: rgba(255,255,255,0.4);
+        }
+
+        /* Hide Microsoft Edge reveal eye icon */
+        input::-ms-reveal,
+        input::-ms-clear {
+            display: none;
+        }
+
+        /* Override default autofill styling */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: white !important;
+            -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.1) inset !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         .error-message {
@@ -165,7 +180,10 @@
 
     <div class="register-card">
         <div class="register-header">
-            <div class="logo-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 1rem;">
+                <img src="{{ asset('images/logos/logokabserang.png') }}" alt="Logo Desa Kopo" style="height: 60px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+                <div class="logo-icon" style="margin-bottom: 0; font-size: 2.5rem;"><i class="fa-solid fa-user-plus"></i></div>
+            </div>
             <h2>Registrasi Penduduk</h2>
             <p>Silakan daftarkan akun untuk mengajukan pelayanan surat desa.</p>
         </div>
@@ -177,13 +195,13 @@
             </div>
         @endif
 
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{ route('register') }}" method="POST" autocomplete="off">
             @csrf
             <div class="form-group">
                 <label for="name">Nama Lengkap</label>
                 <div class="input-group">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Contoh: Budi Santoso" required value="{{ old('name') }}" autofocus>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Contoh: Budi Santoso" required value="{{ old('name') }}" autofocus autocomplete="off">
                 </div>
             </div>
 
@@ -191,7 +209,7 @@
                 <label for="email">Alamat Email</label>
                 <div class="input-group">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="budi@example.com" required value="{{ old('email') }}">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="budi@example.com" required value="{{ old('email') }}" autocomplete="off">
                 </div>
             </div>
 
@@ -199,7 +217,8 @@
                 <label for="password">Password</label>
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Min. 6 karakter" required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Min. 6 karakter" required style="padding-right: 45px;" autocomplete="new-password">
+                    <i class="fa-solid fa-eye-slash" id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.6); font-size: 1.1rem; z-index: 10;"></i>
                 </div>
             </div>
 
@@ -207,7 +226,8 @@
                 <label for="password_confirmation">Konfirmasi Password</label>
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Ketik ulang password" required>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Ketik ulang password" required style="padding-right: 45px;" autocomplete="new-password">
+                    <i class="fa-solid fa-eye-slash" id="togglePasswordConfirmation" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.6); font-size: 1.1rem; z-index: 10;"></i>
                 </div>
             </div>
 
@@ -223,5 +243,24 @@
         </div>
     </div>
 
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        const togglePasswordConfirm = document.querySelector('#togglePasswordConfirmation');
+        const passwordConfirm = document.querySelector('#password_confirmation');
+        togglePasswordConfirm.addEventListener('click', function () {
+            const type = passwordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordConfirm.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 </html>

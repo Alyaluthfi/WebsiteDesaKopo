@@ -46,28 +46,6 @@ class BumdesController extends Controller
                 'kontak' => '0834-5678-9012',
                 'produk' => ['Sembako & Bahan Pokok', 'Peralatan Dapur', 'Alat Kebersihan', 'Perabotan Rumah Tangga']
             ],
-            'kriya' => [
-                'name' => 'Sentra Kriya Bambu Kopo',
-                'category' => 'Industri Kreatif',
-                'image' => 'images/bumdes_crafts_1776842672130.png',
-                'description' => 'Pusat kerajinan anyaman bambu yang memberdayakan pengrajin lokal. Menghasilkan produk furnitur, dekorasi rumah, hingga suvenir yang telah menembus pasar nasional.',
-                'detail' => 'Desa Kopo memiliki potensi melimpah pada tanaman bambu. BUMDes Sentra Kriya Bambu dibentuk untuk memberikan pelatihan dan memfasilitasi produksi anyaman bambu bagi masyarakat. Produk andalan dari sentra ini meliputi kursi bambu lipat, keranjang parsel, kap lampu, dan berbagai suvenir pernikahan yang memiliki nilai seni dan jual yang tinggi. Produk-produk ini telah sering diikutsertakan dalam pameran UMKM tingkat provinsi.',
-                'address' => 'Kp. Pengrajin RT 05/03, Desa Kopo, Kec. Kopo, Kabupaten Serang, Banten 42178',
-                'jam_buka' => 'Senin - Sabtu, 08:00 - 16:00 WIB',
-                'kontak' => '0845-6789-0123',
-                'produk' => ['Kursi Bambu Lipat', 'Keranjang Parsel Anyaman', 'Kap Lampu Dekoratif', 'Souvenir Anyaman Bambu']
-            ],
-            'waste' => [
-                'name' => 'Bank Sampah "Kopo Bersih"',
-                'category' => 'Lingkungan',
-                'image' => 'images/bumdes_waste_1776842688452.png',
-                'description' => 'Fasilitas manajemen sampah terpadu yang mengubah limbah menjadi berkah. Warga dapat menabung sampah yang bernilai ekonomis dan diolah menjadi pupuk kompos.',
-                'detail' => 'Bank Sampah Kopo Bersih merupakan wujud kepedulian Desa Kopo terhadap kelestarian lingkungan. Program ini mengedukasi warga untuk memilah sampah dari rumah. Warga yang menyetorkan sampah anorganik (plastik, botol, kardus, logam) akan dicatat saldonya dalam buku tabungan bank sampah. Saldo tersebut dapat dicairkan setiap menjelang hari raya. Sementara itu, sampah organik dikelola dan didaur ulang menjadi pupuk kompos yang disalurkan kembali kepada petani lokal dengan harga bersubsidi.',
-                'address' => 'Jl. Lingkar Kopo Blok C, Desa Kopo, Kec. Kopo, Kabupaten Serang, Banten 42178',
-                'jam_buka' => 'Selasa, Kamis, Sabtu, 09:00 - 14:00 WIB',
-                'kontak' => '0856-7890-1234',
-                'produk' => ['Pupuk Kompos (Per Karung)', 'Penyetoran Sampah Anorganik', 'Tabungan Sampah Plastik']
-            ],
         ];
 
         return $bumdesData[$slug] ?? null;

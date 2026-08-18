@@ -99,4 +99,51 @@ class PelayananController extends Controller
 
         return view('auth.profile', compact('user', 'permohonanList', 'bumdesTransactions'));
     }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        ], [
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
+            'email.unique' => 'Alamat email sudah digunakan oleh pengguna lain.',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('akun')->with('success', 'Profil Anda berhasil diperbarui.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'new_password.required' => 'Password baru wajib diisi.',
+            'new_password.min' => 'Password baru minimal harus 6 karakter.',
+            'new_password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+        ]);
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Password saat ini yang Anda masukkan salah.']);
+        }
+
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password),
+        ]);
+
+        return redirect()->route('akun')->with('success', 'Password Anda berhasil diperbarui.');
+    }
 }

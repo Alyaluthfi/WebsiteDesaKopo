@@ -17,8 +17,6 @@ class FinancialTransactionSeeder extends Seeder
         $bumdesMart = Bumdes::where('slug', 'mart')->first();
         $bumdesWisata = Bumdes::where('slug', 'wisata')->first();
         $bumdesAgro = Bumdes::where('slug', 'agro')->first();
-        $bumdesKriya = Bumdes::where('slug', 'kriya')->first();
-        $bumdesWaste = Bumdes::where('slug', 'waste')->first();
 
         $transactions = [
             // PEMASUKAN

@@ -302,7 +302,7 @@
     <div class="admin-header-sticky">
         <!-- Header Navbar Admin -->
         <nav class="admin-nav">
-            <h2><i class="fa-solid fa-gauge-high"></i> Panel Admin Desa Kopo</h2>
+            <h2><img src="{{ asset('images/logos/logokabserang.png') }}" alt="Logo Desa Kopo" style="height: 30px; vertical-align: middle; margin-right: 10px;"> Panel Admin Desa Kopo</h2>
             <div class="user-menu">
                 <span><i class="fa-solid fa-user-tie" style="margin-right: 5px; color: var(--accent);"></i> {{ Auth::user()->name }}</span>
                 <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
@@ -328,6 +328,9 @@
             </a>
             <a href="{{ route('admin.bumdes.index') }}" style="text-decoration: none; font-weight: 700; color: var(--text-muted); padding: 0.5rem 1rem; border-bottom: 3px solid transparent; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
                 <i class="fa-solid fa-store"></i> Kelola BUMDes
+            </a>
+            <a href="{{ route('admin.document.index') }}" style="text-decoration: none; font-weight: 700; color: var(--text-muted); padding: 0.5rem 1rem; border-bottom: 3px solid transparent; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+                <i class="fa-solid fa-file-pdf"></i> Kelola Dokumen
             </a>
         </div>
     </div>

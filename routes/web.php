@@ -15,12 +15,15 @@ use App\Http\Controllers\PelayananController;
 use App\Http\Controllers\AdminPermohonanController;
 use App\Http\Controllers\BumdesController;
 use App\Http\Controllers\AdminBumdesController;
+use App\Models\Document;
+use App\Http\Controllers\AdminDocumentController;
 
 Route::get('/', function () {
     $bumdesList = [];
     $finance = null;
     $beritaList = [];
     $strukturList = [];
+    $documents = [];
 
     try {
         if (Schema::hasTable('bumdes')) {
@@ -34,6 +37,9 @@ Route::get('/', function () {
         }
         if (Schema::hasTable('struktur_organisasis')) {
             $strukturList = StrukturOrganisasi::orderBy('urutan', 'asc')->get();
+        }
+        if (Schema::hasTable('documents')) {
+            $documents = Document::orderBy('created_at', 'desc')->get();
         }
     } catch (\Exception $e) {
         // Fallback to empty/static if database not yet migrated
@@ -62,20 +68,6 @@ Route::get('/', function () {
                 'category' => 'Pariwisata',
                 'image' => 'images/bumdes_tourism_1776842653286.png',
                 'description' => 'Destinasi ekowisata yang menonjolkan keindahan alam pedesaan, aliran sungai yang jernih, dan fasilitas outbound. Menjadi sumber Pendapatan Asli Desa (PADes) unggulan.'
-            ],
-            (object)[
-                'slug' => 'kriya',
-                'name' => 'Sentra Kriya Bambu Kopo',
-                'category' => 'Industri Kreatif',
-                'image' => 'images/bumdes_crafts_1776842672130.png',
-                'description' => 'Pusat kerajinan anyaman bambu yang memberdayakan pengrajin lokal. Menghasilkan produk furnitur, dekorasi rumah, hingga suvenir yang telah menembus pasar nasional.'
-            ],
-            (object)[
-                'slug' => 'waste',
-                'name' => 'Bank Sampah "Kopo Bersih"',
-                'category' => 'Lingkungan',
-                'image' => 'images/bumdes_waste_1776842688452.png',
-                'description' => 'Fasilitas manajemen sampah terpadu yang mengubah limbah menjadi berkah. Warga dapat menabung sampah yang bernilai ekonomis dan diolah menjadi pupuk kompos.'
             ]
         ]);
     }
@@ -88,7 +80,7 @@ Route::get('/', function () {
         ];
     }
 
-    return view('welcome', compact('bumdesList', 'finance', 'beritaList', 'strukturList'));
+    return view('welcome', compact('bumdesList', 'finance', 'beritaList', 'strukturList', 'documents'));
 })->name('home');
 
 Route::get('/bumdes/{slug}', [BumdesController::class, 'show'])->name('bumdes.show');
@@ -96,6 +88,9 @@ Route::post('/bumdes/{slug}/pesan', [BumdesController::class, 'buy'])->name('bum
 
 // Public route for detail transparency
 Route::get('/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
+
+// Public route for downloading documents
+Route::get('/dokumen/unduh/{id}', [AdminDocumentController::class, 'download'])->name('document.download');
 
 // Admin & Resident Auth routes
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
@@ -107,11 +102,19 @@ Route::post('/login', [AdminAuthController::class, 'login']);
 Route::get('/register', [AdminAuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AdminAuthController::class, 'register']);
 
+// Forgot & Reset Password routes
+Route::get('/forgot-password', [AdminAuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AdminAuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AdminAuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AdminAuthController::class, 'resetPassword'])->name('password.update');
+
 // Pelayanan routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/pelayanan/{jenis}', [PelayananController::class, 'showForm'])->name('pelayanan.form');
     Route::post('/pelayanan/{jenis}', [PelayananController::class, 'submitForm'])->name('pelayanan.submit');
     Route::get('/akun', [PelayananController::class, 'showProfile'])->name('akun');
+    Route::post('/akun/update-profile', [PelayananController::class, 'updateProfile'])->name('akun.update-profile');
+    Route::post('/akun/update-password', [PelayananController::class, 'updatePassword'])->name('akun.update-password');
 });
 
 // Admin Dashboard routes
@@ -141,4 +144,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/bumdes', [AdminBumdesController::class, 'index'])->name('admin.bumdes.index');
     Route::put('/admin/bumdes/{id}', [AdminBumdesController::class, 'updateStatus'])->name('admin.bumdes.update');
     Route::delete('/admin/bumdes/{id}', [AdminBumdesController::class, 'destroy'])->name('admin.bumdes.destroy');
+
+    // Document admin routes
+    Route::get('/admin/dokumen', [AdminDocumentController::class, 'index'])->name('admin.document.index');
+    Route::post('/admin/dokumen', [AdminDocumentController::class, 'store'])->name('admin.document.store');
+    Route::delete('/admin/dokumen/{id}', [AdminDocumentController::class, 'destroy'])->name('admin.document.destroy');
 });

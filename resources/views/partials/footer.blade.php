@@ -1,12 +1,39 @@
 <footer id="kontak">
     <div class="footer-content">
         <div class="footer-info">
-            <h3><i class="fa-solid fa-leaf"></i> Desa Kopo</h3>
+            <h3 class="footer-brand">
+                <img src="{{ asset('images/logos/logokabserang.png') }}" alt="Logo Desa Kopo" class="footer-logo-img">
+                <span>Desa Kopo</span>
+            </h3>
             <p>Portal resmi pelayanan dan informasi Desa Kopo, Kabupaten Serang. Kami berkomitmen memberikan pelayanan terbaik dan transparan bagi seluruh warga.</p>
             <div style="margin-top: 2rem;">
                 <p><i class="fa-solid fa-location-dot"></i> Jl. Utama Desa Kopo, Kec. Kopo,<br>Kabupaten Serang, Banten 42178</p>
-                <p><i class="fa-solid fa-envelope"></i> pemdes@kopo.desa.id</p>
-                <p><i class="fa-solid fa-phone"></i> (0254) 123456</p>
+                <p><i class="fa-solid fa-envelope"></i> desakoposerangbanten@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i> 0877-7306-1665</p>
+            </div>
+
+            <div class="footer-funding">
+                <div class="funding-columns">
+                    <div class="funding-col">
+                        <span class="funding-title">Dipersembahkan Oleh:</span>
+                        <div class="funding-logos">
+                            <img src="{{ asset('images/logos/logounitrta.png') }}" alt="Logo UNTIRTA" class="funding-logo">
+                        </div>
+                    </div>
+                    <div class="funding-col">
+                        <span class="funding-title">Didanai Oleh:</span>
+                        <div class="funding-logos">
+                            <img src="{{ asset('images/logos/logokemendikbut.png') }}" alt="Logo Kemendikbud" class="funding-logo">
+                            <img src="{{ asset('images/logos/logodiktisaintek.png') }}" alt="Logo KemdiktiSaintek" class="funding-logo">
+                            <!-- Logo BIMA (Disiapkan spacenya, disembunyikan jika gambar belum ada) -->
+                            <img src="{{ asset('images/logos/logobima.png') }}" alt="Logo BIMA" class="funding-logo bima-logo" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+                <div class="funding-text-wrapper">
+                    <p class="funding-text">Direktorat Riset, Teknologi, dan Pengabdian kepada Masyarakat</p>
+                    <p class="funding-text">Kementerian Pendidikan Tinggi, Sains, dan Teknologi Republik Indonesia</p>
+                </div>
             </div>
         </div>
         

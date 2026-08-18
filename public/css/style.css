@@ -82,8 +82,22 @@ nav {
     color: var(--primary);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     text-decoration: none;
+    transition: var(--transition);
+}
+
+.logo-img {
+    height: 42px;
+    width: auto;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.05);
 }
 
 .logo i {
@@ -435,13 +449,22 @@ footer {
     margin-bottom: 3rem;
 }
 
-.footer-info h3 {
+.footer-info h3,
+.footer-brand {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: white;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+}
+
+.footer-logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 .footer-info p {
@@ -457,11 +480,80 @@ footer {
     margin-top: 5px;
 }
 
+/* Footer Funding Section */
+.footer-funding {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.funding-columns {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.funding-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.funding-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.60);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.funding-logos {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 0.5rem;
+    width: fit-content;
+}
+
+.funding-logo {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.funding-logo:hover {
+    transform: scale(1.06);
+}
+
+.funding-logo.bima-logo {
+    height: 68px; /* Boost height slightly for visual balance */
+}
+
+.funding-text-wrapper {
+    margin-top: 1rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    padding-top: 1rem;
+}
+
+.funding-text {
+    font-size: 0.8rem !important;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.70) !important;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
 .map-container {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    height: 300px;
+    height: 480px;
 }
 
 .map-container iframe {
@@ -485,9 +577,17 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .logo { font-size: 1.25rem; gap: 8px; }
+    .logo-img { height: 34px; }
+    .footer-brand { font-size: 1.6rem; }
+    .footer-logo-img { height: 38px; }
+    .funding-columns { gap: 20px; margin-top: 0.5rem; margin-bottom: 1rem; }
+    .funding-logos { gap: 15px; margin-top: 0.25rem; }
+    .funding-logo { height: 44px; }
     .hero h1 { font-size: 2.5rem; }
     .nav-links { display: none; }
     .footer-content { grid-template-columns: 1fr; }
+    .map-container { height: 280px; }
     .finance-section { padding: 3rem 5%; margin: 0 1rem; }
     .modal-container { width: 95%; max-height: 95vh; }
     .modal-img-wrapper { height: 200px; }
@@ -792,3 +892,108 @@ footer {
     display: none !important;
 }
 
+/* Dokumen Section */
+.dokumen-section {
+    padding: 5rem 10%;
+    background-color: #f8fafc;
+}
+
+.dokumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.dokumen-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dokumen-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.doc-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.doc-icon-wrapper.pdf {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.doc-icon-wrapper.gambar {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+
+.doc-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.doc-info h3 {
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.doc-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 15px;
+    font-weight: 600;
+}
+
+.doc-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.doc-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+}
+
+.btn-download {
+    align-self: flex-start;
+    background-color: var(--primary);
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-download:hover {
+    background-color: var(--primary-light);
+}

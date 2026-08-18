@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #047857 100%);
@@ -77,7 +78,7 @@
             position: relative;
         }
 
-        .input-group i {
+        .input-group > i:first-child {
             position: absolute;
             left: 15px;
             top: 50%;
@@ -107,6 +108,21 @@
 
         .form-control::placeholder {
             color: rgba(255,255,255,0.4);
+        }
+
+        /* Hide Microsoft Edge reveal eye icon */
+        input::-ms-reveal,
+        input::-ms-clear {
+            display: none;
+        }
+
+        /* Override default autofill styling */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: white !important;
+            -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.1) inset !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         .error-message {
@@ -165,7 +181,10 @@
 
     <div class="login-card">
         <div class="login-header">
-            <div class="logo-icon"><i class="fa-solid fa-users-gear"></i></div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 1rem;">
+                <img src="{{ asset('images/logos/logokabserang.png') }}" alt="Logo Desa Kopo" style="height: 60px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+                <div class="logo-icon" style="margin-bottom: 0; font-size: 2.5rem;"><i class="fa-solid fa-users-gear"></i></div>
+            </div>
             <h2>Portal Desa Kopo</h2>
             <p>Silakan masuk menggunakan akun Penduduk atau Admin.</p>
         </div>
@@ -177,13 +196,13 @@
             </div>
         @endif
 
-        <form action="{{ url('/admin/login') }}" method="POST">
+        <form action="{{ url('/admin/login') }}" method="POST" autocomplete="off">
             @csrf
             <div class="form-group">
                 <label for="email">Alamat Email</label>
                 <div class="input-group">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="nama@desakoposerang.id" required autofocus value="{{ old('email') }}">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="nama@desakoposerang.id" required autofocus value="{{ old('email') }}" autocomplete="off">
                 </div>
             </div>
 
@@ -191,7 +210,11 @@
                 <label for="password">Password</label>
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required style="padding-right: 45px;" autocomplete="new-password">
+                    <i class="fa-solid fa-eye-slash" id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.6); font-size: 1.1rem; z-index: 10;"></i>
+                </div>
+                <div style="text-align: right; margin-top: 5px;">
+                    <a href="{{ route('password.request') }}" id="btnLupaPassword" style="color: rgba(255,255,255,0.7); font-size: 0.85rem; text-decoration: none; transition: var(--transition);" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Lupa Password?</a>
                 </div>
             </div>
 
@@ -207,5 +230,18 @@
         </div>
     </div>
 
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+    </script>
 </body>
 </html>

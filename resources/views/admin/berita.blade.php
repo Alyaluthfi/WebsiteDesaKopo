@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #065f46;
@@ -326,7 +327,7 @@
     <div class="admin-header-sticky">
         <!-- Header Navbar Admin -->
         <nav class="admin-nav">
-            <h2><i class="fa-solid fa-gauge-high"></i> Panel Admin Desa Kopo</h2>
+            <h2><img src="{{ asset('images/logos/logokabserang.png') }}" alt="Logo Desa Kopo" style="height: 30px; vertical-align: middle; margin-right: 10px;"> Panel Admin Desa Kopo</h2>
             <div class="user-menu">
                 <span><i class="fa-solid fa-user-tie" style="margin-right: 5px; color: var(--accent);"></i> {{ Auth::user()->name }}</span>
                 <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
@@ -352,6 +353,9 @@
             </a>
             <a href="{{ route('admin.bumdes.index') }}" style="text-decoration: none; font-weight: 700; color: var(--text-muted); padding: 0.5rem 1rem; border-bottom: 3px solid transparent; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
                 <i class="fa-solid fa-store"></i> Kelola BUMDes
+            </a>
+            <a href="{{ route('admin.document.index') }}" style="text-decoration: none; font-weight: 700; color: var(--text-muted); padding: 0.5rem 1rem; border-bottom: 3px solid transparent; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+                <i class="fa-solid fa-file-pdf"></i> Kelola Dokumen
             </a>
         </div>
     </div>
@@ -456,7 +460,7 @@
                                         <td>
                                             <div class="actions-cell">
                                                 <button class="btn-action edit" onclick="editBerita({{ json_encode($berita) }})"><i class="fa-solid fa-pen"></i></button>
-                                                <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita acara ini? Semua data dan foto kegiatan akan dihapus permanen.');">
+                                                <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" class="delete-form" data-confirm="Apakah Anda yakin ingin menghapus berita acara ini? Semua data dan foto kegiatan akan dihapus permanen.">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn-action delete"><i class="fa-solid fa-trash"></i></button>
@@ -527,6 +531,35 @@
             document.getElementById('preview-box').style.display = 'none';
             document.getElementById('image-preview').src = '';
         }
+    </script>
+    <script>
+        document.addEventListener('submit', function (e) {
+            if (e.target && e.target.classList.contains('delete-form')) {
+                e.preventDefault();
+                const form = e.target;
+                const message = form.getAttribute('data-confirm') || 'Apakah Anda yakin ingin menghapus data ini?';
+                
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    background: '#ffffff',
+                    color: '#0f172a',
+                    customClass: {
+                        popup: 'swal2-custom-popup',
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

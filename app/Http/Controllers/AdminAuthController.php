@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 
 class AdminAuthController extends Controller
 {
@@ -76,5 +80,84 @@ class AdminAuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('home');
+    }
+
+    public function showForgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email'], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.exists' => 'Email tidak terdaftar di sistem kami.'
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('status', 'Link reset password telah dikirim ke email Anda.');
+        }
+
+        // Terjemahkan error status
+        $errorMessage = 'Gagal mengirim email reset password.';
+        if ($status === Password::RESET_THROTTLED) {
+            $errorMessage = 'Silakan tunggu beberapa saat sebelum mencoba lagi.';
+        } elseif ($status === Password::INVALID_USER) {
+            $errorMessage = 'Pengguna dengan alamat email tersebut tidak ditemukan.';
+        }
+
+        return back()->withErrors(['email' => $errorMessage]);
+    }
+
+    public function showResetPassword($token, Request $request)
+    {
+        return view('auth.reset-password', ['token' => $token, 'email' => $request->email]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'password.required' => 'Password baru wajib diisi.',
+            'password.min' => 'Password minimal harus 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.'
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Password Anda berhasil direset! Silakan login dengan password baru.');
+        }
+
+        // Terjemahkan error status
+        $errorMessage = 'Gagal mereset password.';
+        if ($status === Password::INVALID_TOKEN) {
+            $errorMessage = 'Token reset password tidak valid atau sudah kedaluwarsa.';
+        } elseif ($status === Password::INVALID_USER) {
+            $errorMessage = 'Pengguna dengan alamat email tersebut tidak ditemukan.';
+        }
+
+        return back()->withErrors(['email' => $errorMessage]);
     }
 }
